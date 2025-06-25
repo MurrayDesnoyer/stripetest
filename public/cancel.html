@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"> 
+    <title>Checkout canceled</title>-->
+    <title>Extract Referrer URL</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <section>
+    <h1>Referal URL</h1>
+    <p>Previous page URL: <id="referrer"></p>
+    <script>
+      // Get the referrer URL
+      const referrerURL = document.referrer;
+      // Display the referrer URL in the paragraph
+      document.getElementById('referrer').textContent = referrerURL;
+      
+      // Log the referrer URL to the console
+      console.log('Referrer URL:', referrerURL);
+
+    </script>
+  </section>
+  <section>
+    <script src="script.js"></script> 
+    <p>Forgot to add something to your cart? Shop around then come back to pay!</p>
+  </section>
+</body>
+</html>
