@@ -1,6 +1,9 @@
 # Accept a Payment with Stripe Checkout
 
-Stripe Checkout is the fastest way to get started with payments. Included are some basic build and run scripts you can use to start up the application.
+Stripe Checkout is the fastest way to get started with payments. The workflow is a FORM commit html call from 
+Hubspot. To the returned Checkout scession from stripe we add the item, Succsee route, Cancel route. These 
+Routes then send out the approperiate email templete and frturns the customer to Hubspot correct URL.
+This package uses, nodejs, mailtrap, Hubspot, Stripe API Checkout.
 
 ## Set Price ID
 
