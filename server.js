@@ -17,8 +17,6 @@ const bodyParser = require('body-parser');
 //------
 
 
-
-
 // --- used for nademailer
 const nodemailer = require('nodemailer')
 const ejs = require('ejs')
@@ -29,8 +27,8 @@ const transporter = nodemailer.createTransport({
   port: 2525,
   //secure: false, // upgrade later with STARTTLS
   auth: {
-    user: "6dead414459c11",
-    pass: "b3e44427381646",
+    user: process.env.MAIL_SANDBOX_USER,
+    pass: process.env.MAIL_SANDBOX_PASS,
   }
 });
 

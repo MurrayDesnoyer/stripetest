@@ -21,7 +21,7 @@ npm install -g npm@11.4.1  - to install that version
 
 2. Run the server
 
-~~~
+~~~git
 npm start
 ~~~
 
