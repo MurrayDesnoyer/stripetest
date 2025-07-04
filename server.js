@@ -21,16 +21,32 @@ const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer')
 const ejs = require('ejs')
 
-// create the mail transp[orter function
+// create the mail transportor for production
 const transporter = nodemailer.createTransport({
-  host: "sandbox.smtp.mailtrap.io",
-  port: 2525,
-  //secure: false, // upgrade later with STARTTLS
+  host: "live.smtp.mailtrap.io",
+  port: 587,                      // non encrypted port
+  secure: false,                  // upgrade later with STARTTLS
   auth: {
-    user: process.env.MAIL_SANDBOX_USER,
-    pass: process.env.MAIL_SANDBOX_PASS,
+    user: "smtp@mailtrap.io",    //process.env.MAIL_ORIGIN_USER,
+    pass: process.env.MAIL_ORIGIN_PASS,
+  },
+  tls:{
+    rejectUnauthorized: false // Optional: allows self-signed certs (not recommended for production)
   }
 });
+
+//---------------------------------------------
+
+// // create the mail transporter function for testing
+// const transporter = nodemailer.createTransport({
+//   host: "sandbox.smtp.mailtrap.io",
+//   port: 2525,
+//   //secure: false, // upgrade later with STARTTLS
+//   auth: {
+//     user: process.env.MAIL_SANDBOX_USER,
+//     pass: process.env.MAIL_SANDBOX_PASS,
+//   }
+// });
 
 // define  the send mail function
 async function sendEmail(to, subject, template, data) {
@@ -38,7 +54,7 @@ async function sendEmail(to, subject, template, data) {
         const html = await ejs.renderFile(__dirname + '/public/' + template + '.ejs', data, { async: true })
         
         const mailOptions = {
-            from: 'support@originintl.com',
+            from: 'no-reply@originintl.com',
             to,
             subject,
             //text: 'Simple email message from mjd test emailer'
@@ -153,7 +169,7 @@ app.get(`/complete`, async (req, res)  => {
     sendEmail(user.email, 'Welcome to Origin', 'welcomeMessage',  data1 )
     sendEmail('sales@originintl.com', 'New ScanViz Customer', 'newScanVizCustomer',data1) 
   } else { 
-    res.send('Stack is empty'); 
+    //res.send('Stack is empty'); 
     res.redirect(`${process.env.HUBSPOT_FORM_URL}`)
     //res.redirect(`/submit.html`)
   } 
