@@ -1,5 +1,5 @@
 {
-  "name": "stripe-test",
+  "name": "stripetest",
   "version": "1.0.0",
   "description": "A sample Stripe implementation",
   "main": "server.js",

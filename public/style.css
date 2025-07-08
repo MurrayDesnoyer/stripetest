@@ -48,6 +48,14 @@ img {
   width: 54px;
   height: 57px;
 }
+h1 {
+  font-style: bold;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 22px;
+  letter-spacing: -0.154px;
+  color: #1c2d8d;
+}
 h3,
 h5 {
   font-style: normal;

@@ -8,9 +8,13 @@
     <%- await include('styles.ejs') %>
 </head>
 <body>
-    <h1>Unseccussfull ScanViz Purchase /h1>
+    <h1>Unsuccessful ScanViz Purchase </h1>
     <!--<script>consol.log(`userName: `, %= userName %)</script> -->
 
-    <p><%= userName %> has canceled a payment for ScanViz. This may be a credit card problem or they may have cancelation </p>
+    <p><%= userName %> from <%= companyname %> has canceled a payment for ScanViz. 
+        This may be a credit card problem or a cancelation </p>
+    <p>
+        They can be contacted at this email address <%= email %>
+    </p>
 </body>
 </html>
