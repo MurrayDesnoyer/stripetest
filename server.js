@@ -102,7 +102,7 @@ app.use(bodyParser.json());
 // const express = require('express');   // defined above
 // const app = express();                  // defined above
  
-const userStack = [];
+const userStack = [];   // define a user stact to save the URL contact information
 
 //---------------
 
@@ -113,18 +113,18 @@ app.post('/create-checkout-session', async (req, res) => {
     
     //--- jane19 -- extract from form created with the submit button see Submit.html 
     // in production will have to be from hubspot.  ?? may need the use of keys / authentication. 
-      const { username, email, companyname } = req.body;
+      const { firstname, lastname, email, company } = req.body;
       console.log('Form Data:', req.body);
 
       //const { userName, email } = req.body; 
-      userStack.push({ username, email , companyname }); 
-      console.log('stack name: ', username, 'email:',email, `Company:`,companyname)
+      userStack.push({ firstname, lastname, email , company }); 
+      console.log('stack Firstname: ', firstname, lastname, 'email:',email, `Company:`,company)
       //res.send('User pushed to stack'); 
     
       //res.send(`Received submission: ${username} (${email})`);
       console.log("after app.get")
-      console.log("UserName:",username)
-      console.log("Email:",email)
+      console.log("FirstName:",firstname, "lastname: ", lastname)
+      console.log("Email:",email, "Company:", company)
 
     //--- june 19
 
@@ -176,8 +176,8 @@ app.get(`/complete`, async (req, res)  => {
  // -- stack recall----------------
  const user = userStack.pop(); 
   if (user) { 
-    console.log(`Popped user: ${user.username}, ${user.email}, ${user.companyname}`); 
-    const data1 = {userName: user.username, email: user.email, companyname: user.companyname};                      // the template is looking for userName
+    console.log(`Popped user: ${user.firstname}, ${user.lastname}, ${user.email}, ${user.company}`); 
+    const data1 = {firstname: user.firstname, lastname: user.lastname, email: user.email, company: user.company};                      // the template is looking for userName
     console.log(data1);
     // sendEmail(to, subject, template, data)
     sendEmail(user.email, 'Welcome to Origin', 'welcomeMessage',  data1 )
@@ -200,8 +200,8 @@ app.get(`/cancel`, (req, res) => {
  const user = userStack.pop(); 
   if (user) { 
     //res.send(`Popped user: ${user.name}, ${user.email}`); 
-    console.log(`Popped user: ${user.username}, ${user.email}, ${user.companyname}`); 
-    const data1 = {userName: user.username, email: user.email, companyname: user.companyname};                      // the template is looking for userName
+    console.log(`Popped user: ${user.firstname}, ${user.lastname}, ${user.email}, ${user.company}`);  
+    const data1 = {firstname: user.firstname, lastname: user.lastname, email: user.email, company: user.company};                      // the template is looking for userName                    // the template is looking for userName
     sendEmail(user.email, 'Unsuccessful Payment', 'UnsuccessfulPayment',data1) 
   } else { 
     res.redirect(`${process.env.HUBSPOT_FORM_URL}`)
@@ -209,9 +209,6 @@ app.get(`/cancel`, (req, res) => {
   } 
 // -------------------------------
 
-  // console.log("userData: ",user)
-  // console.log("Email:",user.email) 
-  // console.log("UserName:",user.username)
   res.redirect(`${process.env.HUBSPOT_UNSUCCESSFUL_URL}`)
   //res.redirect(`/submit.html`)     // redirect, in production it will be the url from hubspot cancel page. 
 });
