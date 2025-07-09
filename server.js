@@ -20,6 +20,9 @@ app.get('/', (req, res) => {
 
 app.get('/submit', (req, res) => {      // this is for testing using the submit.html
     res.sendFile(path.join(__dirname, 'public', 'submit.html'));
+    //res.sendFile(__dirname + '/submit.html');
+
+    //res.sendFile(path.join(__dirname,  'submit.html'));
 });
 
 //---------------------------------------------------------
