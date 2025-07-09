@@ -19,7 +19,7 @@ app.get('/', (req, res) => {
 
 //---------------------------------------------------------
 
-const PORT = process.env.PORT_ENV || 4242
+const PORT = process.env.PORT || 4242
 console.log("Port:", PORT)
 
 // // uses to storage user in addUser.js
