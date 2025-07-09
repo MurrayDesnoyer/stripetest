@@ -13,13 +13,15 @@ app.use(express.static('public'));
 //----------- for testing using submit on heroku default --- 
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'submit.html'));
+  //res.sendFile(path.join(__dirname, 'public', 'submit.html'));
+  res.sendFile(path.join(__dirname, 'public'));
 });
 
 //---------------------------------------------------------
 
-const PORT = process.env.PORT || 4242
+const PORT = process.env.PORT_ENV || 4242
 console.log("Port:", PORT)
+
 // // uses to storage user in addUser.js
 const bodyParser = require('body-parser');
 // const { addUser } = require(`./public/addUser`); 
