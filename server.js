@@ -18,7 +18,7 @@ app.get('/', (req, res) => {
 });
 
 
-app.get('/submit', (req, res) => {      // this is for testing using the submit.html
+app.get('/submit.html', (req, res) => {      // this is for testing using the submit.html
   //res.send('submit.html');
   res.redirect(`/submit.html`)
 });
