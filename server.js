@@ -17,6 +17,12 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public'));
 });
 
+
+app.get('/submit', (req, res) => {      // this is for testing using the submit.html
+  res.send('submit.html');
+  // res.redirect(`/submit.html`)
+});
+
 //---------------------------------------------------------
 
 const PORT = process.env.PORT || 4242
