@@ -18,13 +18,42 @@ app.get('/', (req, res) => {
 });
 
 
-app.get('/submit', (req, res) => {      // this is for testing using the submit.html
-    //res.sendFile(path.join(__dirname, 'public', 'submit.html'));    // this works locally
-   console.log('entered get /submit')
-   res.sendFile(__dirname + '/public/submit.html');
+app.get('/submit', async (req, res) => {      
+  console.log('/submit before create checkout scession')
+     const session = await stripe.checkout.sessions.create({
+        //customer_email:'murraydesnoyer@hotmail.com',    // not substutite this with the email varriable from the HTTP push URL.
+          // preset the checkout object
+          //customer_email:email,
+          //customer_creation = "always"; 
+        line_items: [
+          {
+            
+            // Provide the exact Price ID (for example, price_1234) of the product you want to sell price_1REaqoJz9K1DGkoKdW8pTe0F
+            price: 'price_1REakMJz9K1DGkoKFgvTbLat',
+            quantity: 1,
+          },
+        ],
+        mode: 'payment',
+        // success_url: `${YOUR_DOMAIN}/success.html`,  
+        // cancel_url: `${YOUR_DOMAIN}/cancel.html`,
+        // substute for production  note sessionID will enable us to get infor about the transaction. 
+        //success_url: `${process.env.BASE_URL}/success.html?session_id={CHECKOUT_SESSION_ID}`,
+        //success_url: `${process.env.BASE_URL}/success.html?session_id={CHECKOUT_SESSION_ID}`,
+        //cancel_url: `${process.env.BASE_URL}/cancel.html`,
+        success_url: `${process.env.BASE_URL}/complete?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${process.env.BASE_URL}/cancel?session_id={CHECKOUT_SESSION_ID}`,
 
-    //res.sendFile(path.join(__dirname,  'submit.html'));
-});
+        automatic_tax: {enabled: true},
+      });
+      console.log("Post await stripe checkout")
+      console.log("Email:",email)
+      //console.log(session)
+      //console.log("session.url:",session.url )
+      console.log('Stripe Checkout Session:', session);
+      res.redirect(303, session.url);
+
+    },
+);
 
 //---------------------------------------------------------
 
@@ -176,6 +205,7 @@ app.post('/create-checkout-session', async (req, res) => {
       console.log("Email:",email)
       //console.log(session)
       //console.log("session.url:",session.url )
+
       res.redirect(303, session.url);
 
     },
@@ -220,7 +250,9 @@ app.get(`/cancel`, (req, res) => {
   if (user) { 
     //res.send(`Popped user: ${user.name}, ${user.email}`); 
     console.log(`Popped user: ${user.firstname}, ${user.lastname}, ${user.email}, ${user.company}`);  
-    const data1 = {firstname: user.firstname, lastname: user.lastname, email: user.email, company: user.company};                      // the template is looking for userName                    // the template is looking for userName
+    const data1 = {firstname: user.firstname, lastname: user.lastname, email: user.email, company: user.company};
+  user.email 
+    // the template is looking for userName                    // the template is looking for userName
     sendEmail(user.email, 'Unsuccessful Payment', 'UnsuccessfulPayment',data1) 
   } else { 
     res.redirect(`${process.env.HUBSPOT_FORM_URL}`)
