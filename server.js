@@ -38,7 +38,7 @@ app.get('/submit', async (req, res) => {
         mode: 'payment',
         customer_update: {
           name: 'auto',
-          email: 'auto',
+          //email: 'auto',
         },
         // success_url: `${YOUR_DOMAIN}/success.html`,  
         // cancel_url: `${YOUR_DOMAIN}/cancel.html`,
