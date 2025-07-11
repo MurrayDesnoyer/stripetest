@@ -228,28 +228,35 @@ app.get(`/complete`, async (req, res)  => {
   const sessionId = req.query.session_id;
  // add a try {}
   const session = await stripe.checkout.sessions.retrieve(sessionId);
- 
+  const customer = await stripe.customers.retrieve(session.customer);
+  const customerName = customer.name;
+  const customeremail = session.customer_details?.email   //customer.email;
+  const data1 = {customerName:customer.name, email: customer.email }
+  console.log('data1:', data1)
+  sendEmail( customer.email, 'Welcome to Origin', 'welcomeMessage',  data1 )
+  sendEmail('janet.wiaderny@originintl.com', 'New ScanViz Customer', 'newCustomer',data1) 
+  //console.log(session)
+  res.redirect(`${process.env.HUBSPOT_SUCCESS_URL}`)
 
-  console.log(session)
- // -- stack recall----------------
- const user = userStack.pop(); 
-  if (user) { 
-    console.log(`Popped user: ${user.firstname}, ${user.lastname}, ${user.email}, ${user.company}`); 
-    const data1 = {firstname: user.firstname, lastname: user.lastname, email: user.email, company: user.company};                      // the template is looking for userName
-    console.log(data1);
-    // sendEmail(to, subject, template, data)
-    sendEmail(user.email, 'Welcome to Origin', 'welcomeMessage',  data1 )
-    sendEmail('janet.wiaderny@originintl.com', 'New ScanViz Customer', 'newScanVizCustomer',data1) 
-  } else { 
-    //res.send('Stack is empty'); 
-    res.redirect(`${process.env.HUBSPOT_FORM_URL}`)
-    //res.redirect(`/submit.html`)
-  } 
-// -------------------------------
-  // console.log("userData: ",user)
-  // console.log("Email:",user.email) 
-  // console.log("UserName:",user.username)
-  res.redirect(`/success.html`)     // redirect, in production it will be the url from hubspot scanViz success page. 
+  //  // -- stack recall----------------
+//  const user = userStack.pop(); 
+//   if (user) { 
+//     console.log(`Popped user: ${user.firstname}, ${user.lastname}, ${user.email}, ${user.company}`); 
+//     const data1 = {firstname: user.firstname, lastname: user.lastname, email: user.email, company: user.company};                      // the template is looking for userName
+//     console.log(data1);
+//     // sendEmail(to, subject, template, data)
+//     sendEmail(user.email, 'Welcome to Origin', 'welcomeMessage',  data1 )
+//     sendEmail('janet.wiaderny@originintl.com', 'New ScanViz Customer', 'newScanVizCustomer',data1) 
+//   } else { 
+//     //res.send('Stack is empty'); 
+//     res.redirect(`${process.env.HUBSPOT_FORM_URL}`)
+//     //res.redirect(`/submit.html`)
+//   } 
+// // -------------------------------
+// // console.log("userData: ",user)
+// // console.log("Email:",user.email) 
+// // console.log("UserName:",user.username)
+// res.redirect(`/success.html`)     // redirect, in production it will be the url from hubspot scanViz success page. 
 }), //---------------------------------------------------------------
 
 app.get(`/cancel`, async (req, res) => {
