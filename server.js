@@ -36,7 +36,7 @@ app.get('/submit', async (req, res) => {
           },
         ],
         mode: 'payment',
-        // customer_update: {
+        // customer_update: {   // stripe did like how I used it 
         //   name: 'auto',
         //   email: 'auto',
         // },
