@@ -224,6 +224,8 @@ app.get(`/complete`, async (req, res)  => {
   //console.log(session)
   //console.log(lineItems)
   console.log('Your payment was successful')
+  const session = await stripe.checkout.sessions.retrieve(process.env.STRIPE_SECRET_KEY);
+  console.log(session)
  // -- stack recall----------------
  const user = userStack.pop(); 
   if (user) { 
@@ -245,8 +247,14 @@ app.get(`/complete`, async (req, res)  => {
   res.redirect(`/success.html`)     // redirect, in production it will be the url from hubspot scanViz success page. 
 }), //---------------------------------------------------------------
 
-app.get(`/cancel`, (req, res) => {
+app.get(`/cancel`, async (req, res) => {
   console.log('/cancel')
+
+  //const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+
+const session = await stripe.checkout.sessions.retrieve(process.env.STRIPE_SECRET_KEY);
+console.log(session) 
+//);
 // -- stack recall----------------
  const user = userStack.pop(); 
   if (user) { 
