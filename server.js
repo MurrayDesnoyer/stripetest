@@ -17,14 +17,16 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public'));
 });
 
-
+//------------- direct call no FORM ---------------------------------------------
+// https://stripetest-91db9cce4f32.herokuapp.com/submit
+//
 app.get('/submit', async (req, res) => {      
   console.log('/submit before create checkout scession')
      const session = await stripe.checkout.sessions.create({
         //customer_email:'murraydesnoyer@hotmail.com',    // not substutite this with the email varriable from the HTTP push URL.
           // preset the checkout object
           //customer_email:email,
-          //customer_creation = "always"; 
+          customer_creation:"always", 
         line_items: [
           {
             
