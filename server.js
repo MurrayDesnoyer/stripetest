@@ -46,7 +46,7 @@ app.get('/submit', async (req, res) => {
         automatic_tax: {enabled: true},
       });
       console.log("Post await stripe checkout")
-      console.log("Email:",email)
+      //console.log("Email:",email)
       //console.log(session)
       //console.log("session.url:",session.url )
       console.log('Stripe Checkout Session:', session);
