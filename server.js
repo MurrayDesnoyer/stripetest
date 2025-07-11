@@ -21,7 +21,7 @@ app.get('/', (req, res) => {
 app.get('/submit', (req, res) => {      // this is for testing using the submit.html
     //res.sendFile(path.join(__dirname, 'public', 'submit.html'));    // this works locally
    console.log('entered get /submit')
-    res.sendFile(path.join('public', 'submit.html'));
+   res.sendFile(__dirname + '/public/submit.html');
 
     //res.sendFile(path.join(__dirname,  'submit.html'));
 });
