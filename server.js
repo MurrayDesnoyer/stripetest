@@ -26,7 +26,7 @@ app.get('/submit', async (req, res) => {
         //customer_email:'murraydesnoyer@hotmail.com',    // not substutite this with the email varriable from the HTTP push URL.
           // preset the checkout object
           //customer_email:email,
-          customer_creation:"always", 
+        customer_creation:"always", 
         line_items: [
           {
             
@@ -36,6 +36,10 @@ app.get('/submit', async (req, res) => {
           },
         ],
         mode: 'payment',
+        customer_update: {
+          name: 'auto',
+          email: 'auto',
+        },
         // success_url: `${YOUR_DOMAIN}/success.html`,  
         // cancel_url: `${YOUR_DOMAIN}/cancel.html`,
         // substute for production  note sessionID will enable us to get infor about the transaction. 
@@ -261,25 +265,33 @@ app.get(`/complete`, async (req, res)  => {
 
 app.get(`/cancel`, async (req, res) => {
   console.log('/cancel')
-const sessionId = req.query.session_id;
+ const sessionId = req.query.session_id;
  // add a try {}
-const session = await stripe.checkout.sessions.retrieve(sessionId);
-console.log(session) 
-//);
+  const session = await stripe.checkout.sessions.retrieve(sessionId);
+  const customer = await stripe.customers.retrieve(session.customer);
+  const customerName = customer.name;
+  const customeremail = session.customer_details?.email   //customer.email;
+  const data1 = {customerName:customer.name, email: customer.email }
+  console.log('data1:', data1)
+  // send Janet an email 
+  sendEmail('janet.wiaderny@originintl.com', 'Unsuccessful Payment', 'UnsuccessfulPayment',data1) 
+   
+  //console.log(session)
+  res.redirect(`${process.env.HUBSPOT_UNSUCCESSFUL_URL}`)
 
-// -- stack recall----------------
- const user = userStack.pop(); 
-  if (user) { 
-    //res.send(`Popped user: ${user.name}, ${user.email}`); 
-    console.log(`Popped user: ${user.firstname}, ${user.lastname}, ${user.email}, ${user.company}`);  
-    const data1 = {firstname: user.firstname, lastname: user.lastname, email: user.email, company: user.company};
-  user.email 
-    // the template is looking for userName                    // the template is looking for userName
-    sendEmail(user.email, 'Unsuccessful Payment', 'UnsuccessfulPayment',data1) 
-  } else { 
-    res.redirect(`${process.env.HUBSPOT_FORM_URL}`)
-    //res.send('Stack is empty'); 
-  } 
+// // -- stack recall----------------
+//  const user = userStack.pop(); 
+//   if (user) { 
+//     //res.send(`Popped user: ${user.name}, ${user.email}`); 
+//     console.log(`Popped user: ${user.firstname}, ${user.lastname}, ${user.email}, ${user.company}`);  
+//     const data1 = {firstname: user.firstname, lastname: user.lastname, email: user.email, company: user.company};
+//   user.email 
+//     // the template is looking for userName                    // the template is looking for userName
+//     sendEmail(user.email, 'Unsuccessful Payment', 'UnsuccessfulPayment',data1) 
+//   } else { 
+//     res.redirect(`${process.env.HUBSPOT_FORM_URL}`)
+//     //res.send('Stack is empty'); 
+//   } 
 // -------------------------------
 
   res.redirect(`${process.env.HUBSPOT_UNSUCCESSFUL_URL}`)
