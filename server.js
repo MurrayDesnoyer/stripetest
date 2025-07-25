@@ -18,7 +18,7 @@ app.get('/', (req, res) => {
 });
 
 //------------- direct call no FORM ---------------------------------------------
-// https://stripetest-91db9cce4f32.herokuapp.com/submit
+// DIRECT_SUBMIT https call to /submit route
 //
 app.get('/submit', async (req, res) => {      
   console.log('/submit before create checkout scession')
