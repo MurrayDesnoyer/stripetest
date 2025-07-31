@@ -8,13 +8,20 @@
     <%- await include('styles.ejs') %>
 </head>
 <body>
+    <!--
+    <script>
+        const imagePath = "2. DB-ScanViz logo.png"
+        const ImagesUrl = `${imageBaseUrl}${imagePath}`;
+    </script>
+    --->
     <h1>Unsuccessful ScanViz Purchase </h1>
     <!--<script>consol.log(`userName: `, %= userName %)</script> -->
 
-    <p><%= customerName %> has canceled a payment for ScanViz. 
-        This may be a credit card problem or a cancelation </p>
+    <p>At <%= date %> <%= customerName %> has canceled a payment for ScanViz. 
+        This may be a credit card problem or a cancelation at </p>
     <p>
         They can be contacted at this email address <%= email %>
-    </p>
+    </p><img src = "https://stripetest-91db9cce4f32.herokuapp.com/SWPartnerLogo.png" alt=" Dynamic Image"></p>
+    <!-- 2. DB-ScanViz logo.png >
 </body>
 </html>

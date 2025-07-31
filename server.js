@@ -10,6 +10,15 @@ const path = require('path');
 
 app.use(express.static('public'));
 
+//--------- derive the image url path -----------------
+const imageBaseUrl = process.env.IMAGE_BASE_URL; // e.g., "https://cdn.example.com/"
+//const imagePath = 'images/photo.jpg';
+const imageUrl = `${imageBaseUrl}`;
+console.log("imageURL:", imageUrl)
+
+
+
+
 //----------- for testing using submit on heroku default --- 
 
 app.get('/', (req, res) => {
@@ -266,16 +275,60 @@ app.get(`/complete`, async (req, res)  => {
 app.get(`/cancel`, async (req, res) => {
   console.log('/cancel')
  const sessionId = req.query.session_id;
+ console.log(sessionId)
+  const now = new Date();
+
+  const options = {
+    weekday: 'short',
+    year: 'numeric',
+    month: 'short',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+    timeZone: 'America/Toronto'
+  };
+
+  const formatter = new Intl.DateTimeFormat('en-US', options);
+  const parts = formatter.formatToParts(now);
+
+  // Build the string manually to match the desired format
+  const formatted = `${parts.find(p => p.type === 'weekday').value} ` +
+                    `${parts.find(p => p.type === 'month').value} ` +
+                    `${parts.find(p => p.type === 'day').value} ` +
+                    `${parts.find(p => p.type === 'year').value} ` +
+                    `${parts.find(p => p.type === 'hour').value}:` +
+                    `${parts.find(p => p.type === 'minute').value}:`;
  // add a try {}
   const session = await stripe.checkout.sessions.retrieve(sessionId);
-  const customer = await stripe.customers.retrieve(session.customer);
-  const customerName = customer.name;
-  const customeremail = session.customer_details?.email   //customer.email;
-  const data1 = {customerName:customer.name, email: customer.email }
+  console.log("after get checkout")
+  //console.log(session)
+  const customerId = session.customer;
+  
+  const customer = "an unknown customer";
+  if (customerId){
+    //const customer = await stripe.customers.retrieve(session.customer);
+    customer = await stripe.customers.retrieve(customerId);
+  }
+  //console.log("after retreive customer and just before saving customer name")
+  const customerName = customer;
+  const customeremail = "No email address";   //customer.email;
+  if(customer.email != null){
+    const customeremail = customer.email;
+  }
+  // const customerName = customer.name;
+  // const customeremail = session.customer_details?.email   //customer.email;
+
+
+  //console.log("just before constructing the Data1")
+  //const data1 = {customerName:customer.name, email: customer.email }
+  const data1 = {customerName:customerName, email: customeremail, date: formatted, imageUrl: imageUrl }
+
   console.log('data1:', data1)
   // send Janet an email 
   sendEmail('janet.wiaderny@originintl.com', 'Unsuccessful Payment', 'UnsuccessfulPayment',data1) 
-  sendEmail('janet.wiaderny@originintl.com', 'Unsuccessful Payment', 'UnsuccessfulScanVisOrder',data1)  
+  sendEmail('janet.wiaderny@originintl.com', 'Unsuccessful ScanViz Payment', 'UnsuccessfulScanVisOrder',data1)  
   //console.log(session)
   res.redirect(`${process.env.HUBSPOT_UNSUCCESSFUL_URL}`)
 
@@ -294,7 +347,7 @@ app.get(`/cancel`, async (req, res) => {
 //   } 
 // -------------------------------
 
-  res.redirect(`${process.env.HUBSPOT_UNSUCCESSFUL_URL}`)
+  //res.redirect(`${process.env.HUBSPOT_UNSUCCESSFUL_URL}`)
   //res.redirect(`/submit.html`)     // redirect, in production it will be the url from hubspot cancel page. 
 });
 
