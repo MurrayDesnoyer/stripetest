@@ -1,0 +1,4 @@
+# pack-refs with: peeled fully-peeled sorted 
+a9642c3466a31df798fcdbb4efb0c364be49624c refs/heads/master
+4fa1ea897423e92f786aacd82bbcfbd3264d177d refs/remotes/heroku/master
+a9642c3466a31df798fcdbb4efb0c364be49624c refs/remotes/origin/master

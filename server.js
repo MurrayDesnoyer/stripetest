@@ -275,7 +275,7 @@ app.get(`/cancel`, async (req, res) => {
   console.log('data1:', data1)
   // send Janet an email 
   sendEmail('janet.wiaderny@originintl.com', 'Unsuccessful Payment', 'UnsuccessfulPayment',data1) 
-  sendEmail('janet.wiaderny@originintl.com', 'Unsuccessful Payment', 'public/UnsuccessfulScanVisOrder',data1)  
+  sendEmail('janet.wiaderny@originintl.com', 'Unsuccessful Payment', 'UnsuccessfulScanVisOrder',data1)  
   //console.log(session)
   res.redirect(`${process.env.HUBSPOT_UNSUCCESSFUL_URL}`)
 
