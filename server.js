@@ -195,10 +195,9 @@ app.post('/create-checkout-session', async (req, res) => {
       const session = await stripe.checkout.sessions.create({
         //customer_email:'murraydesnoyer@hotmail.com',    // not substutite this with the email varriable from the HTTP push URL.
       
-            customer_email:email,
+            //customer_email:email,     // not entering the email forces the payment has to enter. Cannot preset unless we know the email
         line_items: [
           {
-            
             // Provide the exact Price ID (for example, price_1234) of the product you want to sell price_1REaqoJz9K1DGkoKdW8pTe0F
             price: 'price_1REakMJz9K1DGkoKFgvTbLat',
             quantity: 1,
@@ -241,13 +240,16 @@ app.get(`/complete`, async (req, res)  => {
   const sessionId = req.query.session_id;
  // add a try {}
   const session = await stripe.checkout.sessions.retrieve(sessionId);
-  const customer = await stripe.customers.retrieve(session.customer);
-  const customerName = customer.name;
+  //console.log(session)
+  const customerName = session.customer_details?.name; 
   const customeremail = session.customer_details?.email   //customer.email;
-  const data1 = {customerName:customer.name, email: customer.email }
+  const data1 = {customerName:customerName, email: customeremail }
   console.log('data1:', data1)
-  sendEmail( customer.email, 'Welcome to Origin', 'welcomeMessage',  data1 )
-  sendEmail('janet.wiaderny@originintl.com', 'New ScanViz Customer', 'newCustomer',data1) 
+  // sendEmail( customer.email, 'Welcome to Origin', 'welcomeMessage',  data1 )
+  //sendEmail('janet.wiaderny@originintl.com', 'New ScanViz Customer', 'newCustomer',data1) 
+  sendEmail( customeremail, 'Welcome to Origin', 'ThankyouforPurchasingScanViz',  data1 )
+  sendEmail('janet.wiaderny@originintl.com', 'New ScanViz Customer', 'SomeoneBoughtScanVis',data1) 
+
   //console.log(session)
   res.redirect(`${process.env.HUBSPOT_SUCCESS_URL}`)
 
