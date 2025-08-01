@@ -91,32 +91,34 @@ console.log(envLive);
 // Note: for some reason the if structure prevents the transporter form being created
 //       which forces to use commenting out either the live or test transporters.
 // if (envLive === `live`){
-//   // create the mail transportor for production
-//   console.log(`using the live transporter`)
-//   const  transporter = nodemailer.createTransport({
-//     host: "live.smtp.mailtrap.io",
-//     port: 587,                      // non encrypted port
-//     secure: false,                  // upgrade later with STARTTLS
-//     auth: {
-//       user: "smtp@mailtrap.io",    //process.env.MAIL_ORIGIN_USER,
-//       pass: process.env.MAIL_ORIGIN_PASS,
-//     },
-//     tls:{
-//       rejectUnauthorized: false // Optional: allows self-signed certs (not recommended for production)
-//     }
-//   });
+  // create the mail transportor for production
+  console.log(`using the live transporter`)
+  const  transporter = nodemailer.createTransport({
+    host: "live.smtp.mailtrap.io",
+    port: 587,                      // non encrypted port
+    secure: false,                  // upgrade later with STARTTLS
+    auth: {
+      user: "smtp@mailtrap.io",    //process.env.MAIL_ORIGIN_USER,
+      pass: process.env.MAIL_ORIGIN_PASS,
+    },
+    tls:{
+      rejectUnauthorized: false // Optional: allows self-signed certs (not recommended for production)
+    }
+   });
+
 // } else {
 // create the mail transporter function for testing
-  console.log(`using the sandbox transporter`)
-  const transporter = nodemailer.createTransport({
-    host: "sandbox.smtp.mailtrap.io",
-    port: 2525,
-    //secure: false, // upgrade later with STARTTLS
-    auth: {
-      user: process.env.MAIL_SANDBOX_USER,
-      pass: process.env.MAIL_SANDBOX_PASS,
-    }
-  });
+
+  // console.log(`using the sandbox transporter`)
+  // const transporter = nodemailer.createTransport({
+  //   host: "sandbox.smtp.mailtrap.io",
+  //   port: 2525,
+  //   //secure: false, // upgrade later with STARTTLS
+  //   auth: {
+  //     user: process.env.MAIL_SANDBOX_USER,
+  //     pass: process.env.MAIL_SANDBOX_PASS,
+  //   }
+  // });
 //};
 
 // Optional: verify connection configuration
@@ -181,13 +183,13 @@ app.post('/create-checkout-session', async (req, res) => {
 
       //const { userName, email } = req.body; 
       userStack.push({ firstname, lastname, email , company }); 
-      console.log('stack Firstname: ', firstname, lastname, 'email:',email, `Company:`,company)
+      //console.log('stack Firstname: ', firstname, lastname, 'email:',email, `Company:`,company)
       //res.send('User pushed to stack'); 
     
       //res.send(`Received submission: ${username} (${email})`);
-      console.log("after app.get")
-      console.log("FirstName:",firstname, "lastname: ", lastname)
-      console.log("Email:",email, "Company:", company)
+      //console.log("after app.get")
+     // console.log("FirstName:",firstname, "lastname: ", lastname)
+     // console.log("Email:",email, "Company:", company)
 
     //--- june 19
 
@@ -216,7 +218,7 @@ app.post('/create-checkout-session', async (req, res) => {
         automatic_tax: {enabled: true},
       });
       console.log("Post await stripe checkout")
-      console.log("Email:",email)
+      //console.log("Email:",email)
       //console.log(session)
       //console.log("session.url:",session.url )
 
@@ -329,7 +331,7 @@ app.get(`/cancel`, async (req, res) => {
 
   console.log('data1:', data1)
   // send Janet an email 
-  sendEmail('janet.wiaderny@originintl.com', 'Unsuccessful Payment', 'UnsuccessfulPayment',data1) 
+  //sendEmail('janet.wiaderny@originintl.com', 'Unsuccessful Payment', 'UnsuccessfulPayment',data1) 
   sendEmail('janet.wiaderny@originintl.com', 'Unsuccessful ScanViz Payment', 'UnsuccessfulScanVisOrder',data1)  
   //console.log(session)
   res.redirect(`${process.env.HUBSPOT_UNSUCCESSFUL_URL}`)
