@@ -2,8 +2,17 @@
 
 Stripe Checkout is the fastest way to get started with payments. The workflow is a FORM commit html call from 
 Hubspot. To the returned Checkout scession from stripe we add the item, Succsee route, Cancel route. These 
-Routes then send out the approperiate email templete and frturns the customer to Hubspot correct URL.
+Routes then send out the approperiate email templete and returns the customer to Hubspot correct URL.
 This package uses, nodejs, mailtrap, Hubspot, Stripe API Checkout.
+05-Aug-25
+Mailtrap smpt server has two modes which are managed by comments in server.js
+    1) Sandbok which traps the emails for analysis
+    2) live.smtp.mailtrap.io
+There a environment verriable which set the following
+    NODE_ENV = local        # local or production
+    NODE_ENV_TEST = test    # test or live
+Production: Heroku uses browser DIRECT_SUBMIT
+Local: BASE_URL in the browser for testing
 
 ## Set Price ID
 

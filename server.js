@@ -49,10 +49,7 @@ app.get('/submit', async (req, res) => {
         //   name: 'auto',
         //   email: 'auto',
         // },
-        // success_url: `${YOUR_DOMAIN}/success.html`,  
-        // cancel_url: `${YOUR_DOMAIN}/cancel.html`,
         // substute for production  note sessionID will enable us to get infor about the transaction. 
-        //success_url: `${process.env.BASE_URL}/success.html?session_id={CHECKOUT_SESSION_ID}`,
         //success_url: `${process.env.BASE_URL}/success.html?session_id={CHECKOUT_SESSION_ID}`,
         //cancel_url: `${process.env.BASE_URL}/cancel.html`,
         success_url: `${process.env.BASE_URL}/complete?session_id={CHECKOUT_SESSION_ID}`,
@@ -64,7 +61,7 @@ app.get('/submit', async (req, res) => {
       //console.log("Email:",email)
       //console.log(session)
       //console.log("session.url:",session.url )
-      console.log('Stripe Checkout Session:', session);
+      //console.log('Stripe Checkout Session:', session);
       res.redirect(303, session.url);
 
     },
@@ -136,7 +133,6 @@ transporter.verify(function (error, success) {
 async function sendEmail(to, subject, template, data) {
     try {
         const html = await ejs.renderFile(__dirname + '/public/' + template + '.ejs', data, { async: true })
-        
         const mailOptions = {
             from: 'no-reply@originintl.com',
             to,
@@ -144,15 +140,12 @@ async function sendEmail(to, subject, template, data) {
             //text: 'Simple email message from mjd test emailer'
             html
         }
-
         await transporter.sendMail(mailOptions)  
-        
         console.log('Message sent successfully!')
     } catch (err) {
         console.log('Error: ', err)
     }
 }
-
 // ---
 
 const YOUR_DOMAIN = 'http://localhost:4242';
@@ -164,11 +157,9 @@ app.use(bodyParser.json());
 //-----
 
 // --- using a stack --
-// const express = require('express');   // defined above
+// const express = require('express');     // defined above
 // const app = express();                  // defined above
- 
 const userStack = [];   // define a user stact to save the URL contact information
-
 //---------------
 
 // main entry point to link to Stripe checkout -------------------------------------
@@ -185,8 +176,6 @@ app.post('/create-checkout-session', async (req, res) => {
       userStack.push({ firstname, lastname, email , company }); 
       //console.log('stack Firstname: ', firstname, lastname, 'email:',email, `Company:`,company)
       //res.send('User pushed to stack'); 
-    
-      //res.send(`Received submission: ${username} (${email})`);
       //console.log("after app.get")
      // console.log("FirstName:",firstname, "lastname: ", lastname)
      // console.log("Email:",email, "Company:", company)
@@ -196,8 +185,7 @@ app.post('/create-checkout-session', async (req, res) => {
       //const sessionId = req.body.sessionId;
       const session = await stripe.checkout.sessions.create({
         //customer_email:'murraydesnoyer@hotmail.com',    // not substutite this with the email varriable from the HTTP push URL.
-      
-            //customer_email:email,     // not entering the email forces the payment has to enter. Cannot preset unless we know the email
+        //customer_email:email,     // not entering the email forces the payment has to enter. Cannot preset unless we know the email
         line_items: [
           {
             // Provide the exact Price ID (for example, price_1234) of the product you want to sell price_1REaqoJz9K1DGkoKdW8pTe0F
@@ -206,15 +194,12 @@ app.post('/create-checkout-session', async (req, res) => {
           },
         ],
         mode: 'payment',
-        // success_url: `${YOUR_DOMAIN}/success.html`,  
-        // cancel_url: `${YOUR_DOMAIN}/cancel.html`,
         // substute for production  note sessionID will enable us to get infor about the transaction. 
         //success_url: `${process.env.BASE_URL}/success.html?session_id={CHECKOUT_SESSION_ID}`,
         //success_url: `${process.env.BASE_URL}/success.html?session_id={CHECKOUT_SESSION_ID}`,
         //cancel_url: `${process.env.BASE_URL}/cancel.html`,
         success_url: `${process.env.BASE_URL}/complete?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${process.env.BASE_URL}/cancel?session_id={CHECKOUT_SESSION_ID}`,
-
         automatic_tax: {enabled: true},
       });
       console.log("Post await stripe checkout")
@@ -238,7 +223,6 @@ app.get(`/complete`, async (req, res)  => {
   //console.log(session)
   //console.log(lineItems)
   console.log('Your payment was successful')
-
   const sessionId = req.query.session_id;
  // add a try {}
   const session = await stripe.checkout.sessions.retrieve(sessionId);
@@ -255,7 +239,7 @@ app.get(`/complete`, async (req, res)  => {
   //console.log(session)
   res.redirect(`${process.env.HUBSPOT_SUCCESS_URL}`)
 
-  //  // -- stack recall----------------
+  //  // -- stack recall---------------- NOT used 05-aug-25
 //  const user = userStack.pop(); 
 //   if (user) { 
 //     console.log(`Popped user: ${user.firstname}, ${user.lastname}, ${user.email}, ${user.company}`); 
@@ -276,6 +260,7 @@ app.get(`/complete`, async (req, res)  => {
 // res.redirect(`/success.html`)     // redirect, in production it will be the url from hubspot scanViz success page. 
 }), //---------------------------------------------------------------
 
+// we use date and time to associate the cancel with the customer form 
 app.get(`/cancel`, async (req, res) => {
   console.log('/cancel')
  const sessionId = req.query.session_id;
@@ -323,8 +308,6 @@ app.get(`/cancel`, async (req, res) => {
   }
   // const customerName = customer.name;
   // const customeremail = session.customer_details?.email   //customer.email;
-
-
   //console.log("just before constructing the Data1")
   //const data1 = {customerName:customer.name, email: customer.email }
   const data1 = {customerName:customerName, email: customeremail, date: formatted, imageUrl: imageUrl }
