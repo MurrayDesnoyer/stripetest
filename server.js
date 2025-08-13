@@ -40,7 +40,9 @@ app.get('/submit', async (req, res) => {
           {
             
             // Provide the exact Price ID (for example, price_1234) of the product you want to sell price_1REaqoJz9K1DGkoKdW8pTe0F
-            price: 'price_1REakMJz9K1DGkoKFgvTbLat',
+            // price_1RDqheJz9K1DGkoKcanC3sm9 for live mode
+            //'price_1REakMJz9K1DGkoKFgvTbLat'   for testing
+            price: 'price_1RDqheJz9K1DGkoKcanC3sm9',  
             quantity: 1,
           },
         ],
